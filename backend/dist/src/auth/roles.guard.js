@@ -24,6 +24,10 @@ let RolesGuard = class RolesGuard {
         }
         const request = context.switchToHttp().getRequest();
         const user = request.user;
+        if (!user || !user.role) {
+            console.warn('RolesGuard: No user or role found in request');
+            return false;
+        }
         return roles.includes(user.role);
     }
 };

@@ -7,13 +7,24 @@ export declare class AuthService {
     validateUser(email: string, pass: string): Promise<any>;
     login(user: any): Promise<{
         access_token: string;
-        user: any;
+        user: {
+            id: any;
+            email: any;
+            name: any;
+            role: any;
+        };
     }>;
     register(data: any): Promise<{
-        id: string;
-        createdAt: Date;
         name: string | null;
+        id: string;
         email: string;
         role: import(".prisma/client").$Enums.Role;
+        bio: string | null;
+        profilePhoto: string | null;
+        businessName: string | null;
+        location: string | null;
+        socialLinks: import("@prisma/client/runtime/library").JsonValue | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

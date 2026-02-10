@@ -41,6 +41,21 @@ let WebsitesController = class WebsitesController {
     publish(id, req) {
         return this.websitesService.publish(id, req.user);
     }
+    unpublish(id, req) {
+        return this.websitesService.unpublish(id, req.user);
+    }
+    getBySlug(slug) {
+        return this.websitesService.findBySlug(slug);
+    }
+    getPreview(id, req) {
+        return this.websitesService.getPreview(id, req.user);
+    }
+    getPublicWebsite(username) {
+        return this.websitesService.getPublicWebsite(username);
+    }
+    remove(id, req) {
+        return this.websitesService.remove(id, req.user);
+    }
 };
 exports.WebsitesController = WebsitesController;
 __decorate([
@@ -81,13 +96,55 @@ __decorate([
 ], WebsitesController.prototype, "update", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)(':id/publish'),
+    (0, common_1.Patch)(':id/publish'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], WebsitesController.prototype, "publish", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Patch)(':id/unpublish'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WebsitesController.prototype, "unpublish", null);
+__decorate([
+    (0, common_1.Get)('slug/:slug'),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WebsitesController.prototype, "getBySlug", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)(':id/preview'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WebsitesController.prototype, "getPreview", null);
+__decorate([
+    (0, common_1.Get)('public/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WebsitesController.prototype, "getPublicWebsite", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.USER),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WebsitesController.prototype, "remove", null);
 exports.WebsitesController = WebsitesController = __decorate([
     (0, common_1.Controller)('websites'),
     __metadata("design:paramtypes", [websites_service_1.WebsitesService])

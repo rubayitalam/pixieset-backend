@@ -37,8 +37,37 @@ export class WebsitesController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post(':id/publish')
+    @Patch(':id/publish')
     publish(@Param('id') id: string, @Request() req: any) {
         return this.websitesService.publish(id, req.user);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch(':id/unpublish')
+    unpublish(@Param('id') id: string, @Request() req: any) {
+        return this.websitesService.unpublish(id, req.user);
+    }
+
+    @Get('slug/:slug')
+    getBySlug(@Param('slug') slug: string) {
+        return this.websitesService.findBySlug(slug);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(':id/preview')
+    getPreview(@Param('id') id: string, @Request() req: any) {
+        return this.websitesService.getPreview(id, req.user);
+    }
+
+    @Get('public/:username')
+    getPublicWebsite(@Param('username') username: string) {
+        return this.websitesService.getPublicWebsite(username);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
+    remove(@Param('id') id: string, @Request() req: any) {
+        return this.websitesService.remove(id, req.user);
     }
 }

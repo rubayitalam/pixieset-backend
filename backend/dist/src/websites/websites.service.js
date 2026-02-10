@@ -70,10 +70,133 @@ let WebsitesService = class WebsitesService {
     }
     async publish(id, user) {
         const website = await this.findOne(id, user);
+        if (website.isPublished) {
+            throw new common_1.ConflictException('Website is already published');
+        }
         return this.prisma.website.update({
             where: { id: website.id },
-            data: { isPublished: !website.isPublished },
+            data: { isPublished: true },
         });
+    }
+    async unpublish(id, user) {
+        const website = await this.findOne(id, user);
+        if (!website.isPublished) {
+            throw new common_1.ConflictException('Website is already unpublished');
+        }
+        return this.prisma.website.update({
+            where: { id: website.id },
+            data: { isPublished: false },
+        });
+    }
+    async findBySlug(slug) {
+        const website = await this.prisma.website.findUnique({
+            where: { slug },
+            include: { user: { select: { name: true } }, template: true },
+        });
+        if (!website) {
+            throw new common_1.NotFoundException('Website not found');
+        }
+        return website;
+    }
+    async getPublicWebsite(username) {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                OR: [
+                    { name: username },
+                    { email: username.replace(/-/g, '.') },
+                ],
+            },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        const website = await this.prisma.website.findFirst({
+            where: {
+                userId: user.id,
+                isPublished: true,
+            },
+            include: {
+                template: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        bio: true,
+                        profilePhoto: true,
+                        businessName: true,
+                        location: true,
+                        socialLinks: true,
+                    },
+                },
+            },
+        });
+        if (!website) {
+            throw new common_1.NotFoundException('No published website found');
+        }
+        const template = website.template;
+        const config = website.config || {};
+        return {
+            website: {
+                id: website.id,
+                userId: website.userId,
+                templateId: website.templateId,
+                slug: website.slug,
+                isPublished: website.isPublished,
+                createdAt: website.createdAt,
+                updatedAt: website.updatedAt,
+            },
+            user: website.user,
+            template,
+            config,
+        };
+    }
+    async remove(id, user) {
+        const website = await this.findOne(id, user);
+        return this.prisma.website.delete({
+            where: { id: website.id },
+        });
+    }
+    async getPreview(id, user) {
+        const website = await this.prisma.website.findUnique({
+            where: { id },
+            include: {
+                template: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        bio: true,
+                        profilePhoto: true,
+                        businessName: true,
+                        location: true,
+                        socialLinks: true,
+                    },
+                },
+            },
+        });
+        if (!website) {
+            throw new common_1.NotFoundException('Website not found');
+        }
+        if (user.role !== client_1.Role.ADMIN && website.userId !== user.userId) {
+            throw new common_1.ForbiddenException('You do not have permission to preview this website');
+        }
+        const config = website.config || {};
+        return {
+            website: {
+                id: website.id,
+                userId: website.userId,
+                templateId: website.templateId,
+                slug: website.slug,
+                isPublished: website.isPublished,
+                createdAt: website.createdAt,
+                updatedAt: website.updatedAt,
+            },
+            user: website.user,
+            template: website.template,
+            config,
+        };
     }
 };
 exports.WebsitesService = WebsitesService;

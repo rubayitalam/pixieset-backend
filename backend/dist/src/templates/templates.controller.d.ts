@@ -6,12 +6,13 @@ export declare class TemplatesController {
     create(createTemplateDto: CreateTemplateDto, req: any): import(".prisma/client").Prisma.Prisma__TemplateClient<{
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         name: string;
         description: string | null;
         thumbnail: string | null;
         structure: import("@prisma/client/runtime/library").JsonValue;
-        isPublic: boolean;
         createdBy: string;
+        isPublic: boolean;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         creator: {
@@ -21,12 +22,13 @@ export declare class TemplatesController {
     } & {
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         name: string;
         description: string | null;
         thumbnail: string | null;
         structure: import("@prisma/client/runtime/library").JsonValue;
-        isPublic: boolean;
         createdBy: string;
+        isPublic: boolean;
     })[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__TemplateClient<({
         creator: {
@@ -36,31 +38,34 @@ export declare class TemplatesController {
     } & {
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         name: string;
         description: string | null;
         thumbnail: string | null;
         structure: import("@prisma/client/runtime/library").JsonValue;
-        isPublic: boolean;
         createdBy: string;
+        isPublic: boolean;
     }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateTemplateDto: UpdateTemplateDto): import(".prisma/client").Prisma.Prisma__TemplateClient<{
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         name: string;
         description: string | null;
         thumbnail: string | null;
         structure: import("@prisma/client/runtime/library").JsonValue;
-        isPublic: boolean;
         createdBy: string;
+        isPublic: boolean;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__TemplateClient<{
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         name: string;
         description: string | null;
         thumbnail: string | null;
         structure: import("@prisma/client/runtime/library").JsonValue;
-        isPublic: boolean;
         createdBy: string;
+        isPublic: boolean;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }
