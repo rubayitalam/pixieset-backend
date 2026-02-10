@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -12,8 +12,12 @@ import Link from 'next/link';
 export default function LoginPage() {
     const { login } = useAuth();
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const isRegistered = searchParams.get('registered') === 'true';
+    const [isRegistered, setIsRegistered] = useState(false);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setIsRegistered(params.get('registered') === 'true');
+    }, []);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
